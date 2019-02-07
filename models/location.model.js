@@ -5,12 +5,11 @@ const locationSchema = new Schema({
   name: { type: String, required: true },
   maleResidents: { type: Number },
   femaleResidents: { type: Number },
-  nested: [{
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Location'
+  isNested: { type: Boolean, default: false },
+  parentId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Location',
     }
-  }]
 });
 
 module.exports = mongoose.model('Location', locationSchema);
