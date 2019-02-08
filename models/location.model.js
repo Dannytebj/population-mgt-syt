@@ -6,7 +6,7 @@ const locationSchema = new Schema({
   maleResidents: { type: Number },
   femaleResidents: { type: Number },
   isNested: { type: Boolean, default: false },
-  parentId: {
+  parent: {
     type: Schema.Types.ObjectId,
     ref: 'Location',
     }

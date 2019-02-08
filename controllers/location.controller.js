@@ -50,7 +50,7 @@ exports.getLocation = (req, res) => {
   const { id } = req.params;
   if (id !== '') {
     Location.findOne({ _id: id })
-      .populate('parentId')
+      .populate('parent')
       .then((location) => {
         if (!location) {
           return res.status(404)
@@ -69,7 +69,7 @@ exports.getLocation = (req, res) => {
 
 exports.getAllLocation = (req, res) => {
   Location.find({})
-    .populate('parentId')
+    .populate('parent')
     .then((locations) => {
       if(locations) {
         res.status(200).send({

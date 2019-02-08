@@ -13,7 +13,7 @@ exports.createLocation = (req, res) => {
     name,
     maleResidents,
     femaleResidents,
-    parentId: parent,
+    parent,
     isNested: (isNested) ? isNested : false
   }
   const newLocation = new Location(payload);
