@@ -66,3 +66,25 @@ exports.getLocation = (req, res) => {
       })
   }
 };
+
+exports.getAllLocation = (req, res) => {
+  Location.find({})
+    .populate('parentId')
+    .then((locations) => {
+      if(locations) {
+        res.status(200).send({
+          message: 'Locations fetched successfully',
+          locations
+        })
+      } else {
+        res.status(200)
+          .send({ message: "There're no locations at the moment"})
+      }
+    })
+    .catch((error) => {
+      res.send({
+        message: 'An error occured',
+        error
+      })
+    })
+};

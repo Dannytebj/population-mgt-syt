@@ -1,7 +1,11 @@
+const Location = require('../models/location.model');
+
 exports.createLocation = (req, res) => {
   let parent;
   if (req.body.parentId === '') {
     parent = undefined;
+  } else {
+    parent = req.body.parentId;
   }
   const { maleResidents, femaleResidents, name, isNested } = req.body;
 
