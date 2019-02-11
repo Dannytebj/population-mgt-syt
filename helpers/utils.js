@@ -1,31 +1,34 @@
-const Location = require('../models/location.model');
+/**
+ * helper callback function for array.reduce method.
+ *
+ * @param {number} total
+ * @param {number} population
+ * @returns {number} population
+ */
+const sumPopulation = (total, population) => {
+  total += population;
+  return total;
+};
 
-exports.createLocation = (req, res) => {
-  let parent;
-  if (req.body.parentId === '') {
-    parent = undefined;
-  } else {
-    parent = req.body.parentId;
-  }
-  const { maleResidents, femaleResidents, name, isNested } = req.body;
+/**
+ * Helper function to aggregate the total population
+ * in an area.
+ *
+ * @param {array} arr array of sub_location
+ * @returns {object} total population by gender
+ */
+exports.getTotalPopulation = (arr) => {
+  const maleArr = [];
+  const femaleArr = []
+  arr.forEach((item) => {
+    maleArr.push(item.maleResidents);
+    femaleArr.push(item.femaleResidents);
+  });
+  const totalMaleResidents = maleArr.reduce(sumPopulation, 0);
+  const totalFemaleResidents = femaleArr.reduce(sumPopulation, 0);
 
-  const payload = {
-    name,
-    maleResidents,
-    femaleResidents,
-    parent,
-    isNested: (isNested) ? isNested : false
-  }
-  const newLocation = new Location(payload);
-  newLocation.save((error, location) => {
-    if (error) {
-      return res.status(500).send({
-        message: error,
-      });
-    }
-    res.status(201).send({
-      message: 'You just created a new location',
-      location,
-    });
-  })
+  return totalPopulation = {
+    totalMaleResidents,
+    totalFemaleResidents
+  };
 }
