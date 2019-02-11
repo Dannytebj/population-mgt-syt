@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
+const routes = require('./routes/routes');
+
 dotenv.config();
 
 const app = express();
@@ -21,6 +23,8 @@ if (process.env.NODE_ENV === 'test') {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use('/api/v1', routes);
 
 
 
