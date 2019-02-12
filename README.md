@@ -4,7 +4,9 @@
 
 A system that contains a list of locations and the total number of residents in each location broken down by gender.
 
-API hosted on heroku [API](https://population-mgt.herokuapp.com/)
+> API hosted on heroku: [API](https://population-mgt.herokuapp.com/)
+
+> Documentation for API: [Here](https://documenter.getpostman.com/view/2091261/RztrJ6HE) 
 
 ### Features
 - A user can create a parent location
