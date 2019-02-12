@@ -1,6 +1,6 @@
 # Population Management System
 
-[![Build Status](https://travis-ci.org/Dannytebj/population-mgt-syt.svg?branch=master)](https://travis-ci.org/Dannytebj/population-mgt-syt)
+[![Build Status](https://travis-ci.org/Dannytebj/population-mgt-syt.svg?branch=master)](https://travis-ci.org/Dannytebj/population-mgt-syt) [![Coverage Status](https://coveralls.io/repos/github/Dannytebj/population-mgt-syt/badge.svg?branch=master)](https://coveralls.io/github/Dannytebj/population-mgt-syt?branch=master)
 
 A system that contains a list of locations and the total number of residents in each location broken down by gender.
 
