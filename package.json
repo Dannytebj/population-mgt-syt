@@ -4,8 +4,10 @@
   "description": "\"A system that contains a list of locations\"",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "start:dev": "babel-watch app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text ./node_modules/.bin/mocha --exit",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -27,6 +29,11 @@
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "babel-watch": "^7.0.0",
-    "eslint": "^5.13.0"
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "coveralls": "^3.0.2",
+    "eslint": "^5.13.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.2.0"
   }
 }

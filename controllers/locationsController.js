@@ -28,45 +28,44 @@ exports.create = (req, res) => {
     })
 
   } else {
-    let parent;
-    if (req.body.parentId === '') {
-      parent = undefined;
-    } else {
       parent = req.body.parentId;
-    }
-    const payload = {
-      name,
-      maleResidents,
-      femaleResidents,
-      parent,
-    }
-    const newLocation = new Location(payload);
-    newLocation.save((error, location) => {
-      if (error) {
-        return res.status(500).send({
-          message: error,
-        });
-      }
-      Parent.findById(parent).exec()
+
+      Parent.findById(parent)
+        .exec()
         .then((model) => {
-          if(!model ) {
+          if(!model) {
             return res.status(404)
-            .send({ message: 'Parent not found' }) 
+              .send({ message: 'parent not found' })
           }
-          model.sub_locations.push(location._id);
-          model.save();
-          res.status(201).send({
-            message: 'You just created a new location',
-            location,
-          });
+          const payload = {
+            name,
+            maleResidents,
+            femaleResidents,
+            parent,
+          }
+          const newLocation = new Location(payload);
+  
+          newLocation.save((error, location) => {
+            if (error) {
+              return res.status(500).send({
+                message: error,
+              });
+            }
+            model.sub_locations.push(location._id);
+            model.save();
+
+            res.status(201).send({
+              message: 'You just created a new location',
+              location,
+            });
+          })
         })
         .catch((error) => {
-          res.status(500).send({ message: 'An error occured', error });
+          res.status(500)
+            .send({ message: 'An error occured' })
         })
-    })
-
+    
   }
-
 };
 
 /**
@@ -95,6 +94,8 @@ exports.getByParent = (req, res) => {
       .catch((error) => {
         res.status(500).send({ message: 'An error occured!', error })
       })
+  } else {
+    res.status(400).send({ message: 'You need to provide the parent id' });
   }
 }
 
@@ -106,24 +107,24 @@ exports.getByParent = (req, res) => {
  */
 exports.getLocations = (req, res) => {
   Location.find({})
-  .populate('parent', 'name')
-  .then((locations) => {
-    if(locations) {
-      res.status(200).send({
-        message: 'Locations fetched successfully',
-        locations
-      })
-    } else {
-      res.status(200)
-        .send({ message: "There're no locations at the moment"})
-    }
-  })
-  .catch((error) => {
-    res.send({
-      message: 'An error occured',
-      error
+    .populate('parent', 'name')
+    .then((locations) => {
+      if (locations) {
+        res.status(200).send({
+          message: 'Locations fetched successfully',
+          locations
+        })
+      } else {
+        res.status(200)
+          .send({ message: "There're no locations at the moment" })
+      }
     })
-  })
+    .catch((error) => {
+      res.send({
+        message: 'An error occured',
+        error
+      })
+    })
 };
 
 /**
@@ -134,37 +135,37 @@ exports.getLocations = (req, res) => {
  */
 exports.updateParent = (req, res) => {
   const { id } = req.params;
-  
+
   if (id !== '') {
     Parent.findOne({ _id: id })
       .exec()
       .then((parentLocation) => {
-        if(!parentLocation) {
+        if (!parentLocation) {
           return res.status(404)
             .send({ message: 'parent location not found' })
         }
         Parent.findByIdAndUpdate({ _id: id }, {
           $set: { name: req.body.name },
         },
-        { new: true }
+          { new: true }
         )
-        .exec()
-        .then((updatedLocation) => {
-          res.status(200)
-            .send({ message: 'Parent updated successfully', updatedLocation });
-        })
-        .catch((error) => {
-          res.status(500)
-          .send({ message: 'An error occured!', error })
-        })
-        
+          .exec()
+          .then((updatedLocation) => {
+            res.status(200)
+              .send({ message: 'Parent updated successfully', updatedLocation });
+          })
+          .catch((error) => {
+            res.status(500)
+              .send({ message: 'An error occured!', error })
+          })
+
       })
       .catch((error) => {
         res.status(500)
           .send({ message: 'An error occured!' })
       });
   } else {
-    res.status(400).send({ message: 'You need to provide the parent id'});
+    res.status(400).send({ message: 'You need to provide the parent id' });
   }
 };
 
@@ -180,12 +181,12 @@ exports.updateLocation = (req, res) => {
     Location.findOne({ _id: id })
       .exec()
       .then((location) => {
-        if(!location) {
+        if (!location) {
           return res.status(404)
             .send({ message: 'location not found' })
         }
         const { name, maleResidents, femaleResidents } = req.body;
-        Location.findByIdAndUpdate({ _id: id },{
+        Location.findByIdAndUpdate({ _id: id }, {
           $set: {
             name,
             maleResidents,
@@ -193,17 +194,17 @@ exports.updateLocation = (req, res) => {
             updatedAt: Date.now()
           },
         },
-        { new: true }
+          { new: true }
         )
-        .exec()
-        .then((updatedLocation) => {
-          res.status(200)
-            .send({ message: 'Location updated successfully', updatedLocation });
-        })
-        .catch((error) => {
-          res.status(500)
-          .send({ message: 'An error occured!', error })
-        })
+          .exec()
+          .then((updatedLocation) => {
+            res.status(200)
+              .send({ message: 'Location updated successfully', updatedLocation });
+          })
+          .catch((error) => {
+            res.status(500)
+              .send({ message: 'An error occured!', error })
+          })
       })
       .catch((error) => {
         res.status(500)
@@ -211,7 +212,6 @@ exports.updateLocation = (req, res) => {
       })
   } else {
     res.status(400).send({ message: 'You need to provide the location id' });
-
   }
 }
 
@@ -223,33 +223,33 @@ exports.updateLocation = (req, res) => {
  */
 exports.deleteLocation = (req, res) => {
   const { id } = req.params;
-  if ( id !== '') {
+  if (id !== '') {
     Location.findOne({ _id: id })
       .exec()
       .then((location) => {
-        if(!location) {
+        if (!location) {
           return res.status(404)
             .send({ message: 'Location not found' })
         }
         Parent.findById(location.parent)
           .exec()
           .then((parentModel) => {
-            if(!parentModel) {
+            if (!parentModel) {
               return res.status(404)
                 .send({ message: 'parent location not found' })
             }
             const subLocationIds = parentModel.sub_locations;
-            for(let i = 0; i < subLocationIds.length; i++) {
-              if(subLocationIds[i] === id) {
+            for (let i = 0; i < subLocationIds.length; i++) {
+              if (subLocationIds[i] === id) {
                 subLocationIds.splice(i, 1);
               }
             }
           })
           .catch((error) => {
             res.status(500)
-            .send({ message: 'An error occured!', error })
+              .send({ message: 'An error occured!', error })
           })
-        Location.findByIdAndRemove( id, (err) => {
+        Location.findByIdAndRemove(id, (err) => {
           if (err) {
             return res.status(500)
               .send({ message: 'An error occured!' })
