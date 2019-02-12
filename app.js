@@ -20,13 +20,15 @@ if (process.env.NODE_ENV === 'test') {
 } else {
     mongoose.connect(config.url);
 }
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(__dirname + "/public/index.html"));
 
 app.use('/api/v1', routes);
 
-
+app.get('/*', function(req,res) {
+    res.sendFile(path.join(__dirname+'/public/index.html'))
+  })
 
 app.listen(port, () => {
     console.log('Server is up and running on port number ' + port);
